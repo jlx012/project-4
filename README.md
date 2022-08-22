@@ -1,181 +1,168 @@
-# express-auth-template
+# Project 4
+A platform to look up music, add songs to a playlist, favorite a song!
 
-A template for starting projects with `express` as an API. Includes
-authentication and common middlewares.
+## User Stories
+#### Registered user
+##### Sign in/out, account information routes
+* As a registered user, I want to be able to sign in
+* As a registered user, I want to be able to sign out
+* As a registered user, I want to be able to change my password
 
-## Installation
+##### All songs
+* As a registered user, I expect to view a list of songs
+* As a registered user, I expect to be able to click on a song and see more info
+* As a registered user, I want to be able to search for a song or songs
+* As a registered user, I want to be able to filter by genre
 
-1. [Download](../../archive/master.zip) this template.
-1. Move the .zip file to your `sei/projects/` directory and Unzip it (creating a
-   folder) -- **NOTE:** if the folder was already unzipped, use the `mv` command
-   line to move it to the `sei/projects/` directory.
-1. Rename the directory from express-auth-template -> your-app-name.
-1. Rename [`README.md`](README.md) to `REF.md` and use as a reference, create a new README and fill with your own content.
-1. Move into the new project and `git init`.
-1. Replace all instances of `'express-auth-template'` with your app name.
-1. Install dependencies with `npm install`.
-1. Ensure that you have `nodemon` installed by running `npm install -g nodemon`.
-2. Once everything is working, make an initial commit.
+##### Favorite Songs
+* As a registered user, I want to be able to be able to add songs to my favorite list
 
-## Structure
+##### Playlists
+* As a registered user, I want to be able to be able to create a playlist
+* As a registered user, I want to be able to be able to delete a playlist
+* As a registered user, I want to be able to be able to add and remove songs from a playlist
 
-Dependencies are stored in [`package.json`](package.json).
+##### Stretch
+* As a registered user, I want to be able to like a song and remove my like
+* As a registered user, I want to be able to rate a song
+* As a registered user, I want to be able to be able create and delete a song
+* As a registered user, I want to be able to follow an artist
 
-The most important file for understanding the structure of the template is
-`server.js`. This is where the actual Express `app` object is created, where
-the middlewares and routes are registered, and more. To register a routefile,
-follow the pattern established here with `exampleRoutes` and `userRoutes`. If
-you want to add any middlewares to your app, do that here.
+#### Unregistered user
+* As a unregistered user, I want to be able to sign up/create account
+* As a unregistered user, I expect to view a list of songs
+* As a unregistered user, I expect to be able to click on a song and see more info and comments/reviews
+* As a unregistered user, I want to be able to search for a song
+* As a unregistered user, I want to be able to see the song club song
 
-The `app` directory contains models and route files. Models are simply Mongoose
-models. To create your own, follow the patterns established in
-`app/models/example.js`. Route files are somewhat similar to controllers in
-Rails, but they cover more functionality, including serialization and deciding
-which HTTP verbs to accept and what to do with them.
+## Wireframes
+![StartPage](./images/startpage.jpg)
+![Login](./images/login.jpg)
+![Sign Up](./images/signup.jpg)
+![Index](./images/mainpage.jpg)
+![All Playlists](./images/playlistlist.jpg)
+![Show Playlist](./images/playlistshow.jpg)
+![Show Song](./images/songshow.jpg)
+![Favorites](./images/favorites.jpg)
 
-The `config` directory holds just `db.js`, which is where you specify the name
-and URL of your database.
+## ERD
+![erds](./images/projectERD.jpg)
 
-The `lib` directory is for code that will be used in other places in the
-application. The token authentication code is stored in `lib/auth.js`. The
-other files in `lib` deal with error handling. `custom_errors.js` is where all
-the different custom classes of errors are created. If you need some other kind
-of error message, you can add it here. There are also some functions defined
-here that are used elsewhere to check for errors. `lib/error_handler.js` is a
-function that will be used in all your `.catch`es. It catches errors, and sets
-the response status code based on what type of error got thrown.
+Playlists {
+    name: {type: String, required: true},
+    description: String,
+    playlistImageUrl: String,
+    user: {
+        type: Schema.Types.ObjectId
+        ref: user
+    }
+}
 
-You probably will only need to interact with files in `app/models`,
-`app/routes`, and `server.js`. You'll need to edit `db/config.js` just once,
-to change the name of your app.
+FavoritesList {
+    user: {
+        type: Schema.Types.ObjectId
+        ref: user
+    },
+    song: String
+}
+
+<!-- FollowList {
+    user: {
+        type: Schema.Types.ObjectId
+        ref: user
+    },
+    artist: String
+} -->
+
 
 ## API
+#### Last FM API I may use
+All api links below start with: http://ws.audioscrobbler.com
 
-Use this as the basis for your own API documentation. Add a new third-level
-heading for your custom entities, and follow the pattern provided for the
-built-in user authentication documentation.
+* Last FM Top Artists API:
+/2.0/?method=chart.gettopartists&api_key=YOUR_API_KEY&format=json
 
-Scripts are included in [`curl-scripts`](curl-scripts) to test built-in actions. Feel free to use Postman for testing, using the curl scripts listed below and in the folder for setting up headers and request bodies.
-Add your own scripts to test your custom API.
+* Last FM Top Songs API:
+/2.0/?method=chart.gettoptracks&api_key=YOUR_API_KEY&format=json
 
-### Authentication
+* Last FM Top Albums API:
+/2.0/?method=artist.gettopalbums&artist=cher&api_key=YOUR_API_KEY&format=json
 
-| Verb   | URI Pattern            | Controller#Action |
+* Last FM Artist Info API:
+/2.0/?method=artist.getinfo&artist=Cher&api_key=YOUR_API_KEY&format=json
+
+* Last FM Song Info API:
+/2.0/?method=track.getInfo&api_key=YOUR_API_KEY&artist=cher&track=believe&format=json
+
+* Last FM Album Info API:
+ /2.0/?method=album.getinfo&api_key=YOUR_API_KEY&artist=Cher&album=Believe&format=json
+
+* Last FM Get Similar Artists API:
+/2.0/?method=artist.getsimilar&artist=cher&api_key=YOUR_API_KEY&format=json
+
+* Last FM Get Similar Songs API:
+/2.0/?method=track.getsimilar&artist=cher&track=believe&api_key=YOUR_API_KEY&format=json
+
+* Last FM Search Artists API:
+/2.0/?method=artist.search&artist=cher&api_key=YOUR_API_KEY&format=json
+
+* Last FM Search Albums API:
+/2.0/?method=artist.search&artist=cher&api_key=YOUR_API_KEY&format=json
+
+* Last FM Search Songs API:
+/2.0/?method=track.search&track=Believe&api_key=YOUR_API_KEY&format=json
+
+API KEY will be in .env file
+
+## Routes
+### User Routes
+| Verb   | URI Pattern            | Description |
 |--------|------------------------|-------------------|
-| POST   | `/sign-up`             | `users#signup`    |
-| POST   | `/sign-in`             | `users#signin`    |
-| PATCH  | `/change-password/` | `users#changepw`  |
-| DELETE | `/sign-out/`        | `users#signout`   |
+| POST   | `/sign-up`             | create account  |
+| POST   | `/sign-in`             | sign into account   |
+| PATCH  | `/change-password/` | change password  |
+| DELETE | `/sign-out/`        | signout  |
 
-#### POST /sign-up
+### Index Routes
+| Verb   | URI Pattern            | Description |
+|--------|------------------------|-------------------|
+| GET   | `/`             | show index   |
+| GET   | `/music/`             | show list of songs and artists   |
 
-Request:
+### Artists Routes
+| Verb   | URI Pattern            | Description |
+|--------|------------------------|-------------------|
+| GET   | `/artist/:id`             | show artist  |
 
-```sh
-curl --include --request POST http://localhost:8000/sign-up \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password",
-      "password_confirmation": "an example password"
-    }
-  }'
-```
+### Songs Routes
+| Verb   | URI Pattern            | Description |
+|--------|------------------------|-------------------|
+| GET   | `/song/:id`             | show song  |
 
-```sh
-curl-scripts/sign-up.sh
-```
+### Albums Routes
+| Verb   | URI Pattern            | Description |
+|--------|------------------------|-------------------|
+| GET   | `/album/:id`             | show album  |
 
-Response:
+### Playlists Routes
+| Verb   | URI Pattern            | Description |
+|--------|------------------------|-------------------|
+| POST   | `/playlists/`             | create a playlist    |
+| GET   | `/playlists/`             | view all playlists    |
+| GET   | `/playlists/:playlistId`  | view a playlist    |
+| PATCH  | `/playlists/:playlistId` | update a playlist  |
+| DELETE | `/playlists/:playlistId`        | delete a playlist   |
 
-```md
-HTTP/1.1 201 Created
-Content-Type: application/json; charset=utf-8
+### Favorites Routes
+| Verb   | URI Pattern            | Description |
+|--------|------------------------|-------------------|
+| GET   | `/favorites`             | see all favorites   |
+| POST   | `/favorites/:id`             | add song to favorites   |
+| DELETE | `/favorites/:id`        | remove song from favorites   |
 
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email"
-  }
-}
-```
-
-#### POST /sign-in
-
-Request:
-
-```sh
-curl --include --request POST http://localhost:8000/sign-in \
-  --header "Content-Type: application/json" \
-  --data '{
-    "credentials": {
-      "email": "an@example.email",
-      "password": "an example password"
-    }
-  }'
-```
-
-```sh
-curl-scripts/sign-in.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-
-{
-  "user": {
-    "id": 1,
-    "email": "an@example.email",
-    "token": "33ad6372f795694b333ec5f329ebeaaa"
-  }
-}
-```
-
-#### PATCH /change-password/
-
-Request:
-
-```sh
-curl --include --request PATCH http://localhost:8000/change-password/ \
-  --header "Authorization: Bearer $TOKEN" \
-  --header "Content-Type: application/json" \
-  --data '{
-    "passwords": {
-      "old": "an example password",
-      "new": "super sekrit"
-    }
-  }'
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa curl-scripts/change-password.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
-
-#### DELETE /sign-out/
-
-Request:
-
-```sh
-curl --include --request DELETE http://localhost:8000/sign-out/ \
-  --header "Authorization: Bearer $TOKEN"
-```
-
-```sh
-TOKEN=33ad6372f795694b333ec5f329ebeaaa curl-scripts/sign-out.sh
-```
-
-Response:
-
-```md
-HTTP/1.1 204 No Content
-```
+<!-- ### Follow Routes
+| Verb   | URI Pattern            | Description |
+|--------|------------------------|-------------------|
+| GET   | `/follow`             | see all artists that I follow   |
+| POST   | `/follow/:id`             | follow an artist  |
+| DELETE | `/follow/:id`        | unfollow an artist  | -->
