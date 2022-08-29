@@ -16,12 +16,14 @@ router.get('/create-playlist', (req, res, next) => {
     res.send('/create-playlist')
 })
 
-router.post('/create-playlist', (req, res, next) => {
+router.post('/create-playlist', requireToken, (req, res, next) => {
     req.body.playlist.owner = req.user.id
 
     Playlist.create(req.body.playlist)
         .then(playlist => {
-            res.status(201).json({playlist})
+            res.status(201).json(playlist)
+
+            console.log(playlist);
         })
         .catch(next)
 })
