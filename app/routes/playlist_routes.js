@@ -16,6 +16,15 @@ router.get('/create-playlist', (req, res, next) => {
     res.send('/create-playlist')
 })
 
+router.get('/playlists', requireToken, (req, res, next) => {
+    Playlist.find()
+        .populate('owner')
+        .then(playlists => {
+            res.status(200).json({ playlists: playlists })
+        })
+        .catch(next)
+})
+
 router.post('/create-playlist', requireToken, (req, res, next) => {
     req.body.playlist.owner = req.user.id
 
@@ -27,5 +36,30 @@ router.post('/create-playlist', requireToken, (req, res, next) => {
         })
         .catch(next)
 })
+
+router.patch('/playlists/:id', requireToken, removeBlanks, (req, res, next) => {
+	delete req.body.playlist.owner
+
+	Playlist.findById(req.params.id)
+		.then(handle404)
+		.then((playlist) => {
+			requireOwnership(req, playlist)
+			return playlist.updateOne(req.body.playlist)
+		})
+		.then(() => res.sendStatus(204))
+		.catch(next)
+})
+
+router.delete('/playlists/:id', requireToken, (req, res, next) => {
+	Playlist.findById(req.params.id)
+		.then(handle404)
+		.then((playlist) => {
+			requireOwnership(req, playlist)
+			playlist.deleteOne()
+		})
+		.then(() => res.sendStatus(204))
+		.catch(next)
+})
+
 
 module.exports = router
