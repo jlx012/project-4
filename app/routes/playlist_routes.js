@@ -25,6 +25,17 @@ router.get('/playlists',  (req, res, next) => {
         .catch(next)
 })
 
+// Show for specific playlist
+router.get('/playlists/:id', (req, res, next) => {
+    const id = req.params.id
+
+    Playlist.findById(id)
+        .populate('owner')
+        .then(handle404)
+        .then((playlist) => res.status(200).json({ playlist: playlist }))
+        .catch(next)
+})
+
 router.post('/create-playlist', requireToken, (req, res, next) => {
     req.body.playlist.owner = req.user.id
 
