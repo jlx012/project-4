@@ -16,7 +16,7 @@ router.get('/create-playlist', (req, res, next) => {
     res.send('/create-playlist')
 })
 
-router.get('/playlists', requireToken, (req, res, next) => {
+router.get('/playlists',  (req, res, next) => {
     Playlist.find()
         .populate('owner')
         .then(playlists => {
