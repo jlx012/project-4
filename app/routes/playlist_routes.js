@@ -11,6 +11,8 @@ const router = express.Router()
 const axios = require('axios');
 const { response } = require('../../server')
 const Playlist = require('../models/playlist')
+const user = require('../models/user')
+// const user = /require('../models/user')
 
 router.get('/create-playlist', (req, res, next) => {
     res.send('/create-playlist')
@@ -24,6 +26,24 @@ router.get('/playlists',  (req, res, next) => {
         })
         .catch(next)
 })
+
+// router.post('/add-song', requireToken, async (req, res, next) => {
+
+//     // const { name} = req.body;
+//     // const id = req.user.id;
+//     // try {
+//     //     let user = await user.findbyId(id);
+//     //     const songs = [{trackId}];
+//     // const playlist = {name, songs}
+//     // user.playlists.push(playlist);
+//     // user.save();
+//     // res.status(200).send(user);
+//     // } catch(err) {
+//     //     res.status(400).send(err);
+//     // }
+// })
+
+
 
 // Show for specific playlist
 router.get('/playlists/:id', (req, res, next) => {

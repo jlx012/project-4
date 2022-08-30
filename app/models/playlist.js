@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const { Schema, model } = mongoose
+// const songSchema = require('./song.js');
 
 const playlistSchema = new Schema(
     {
@@ -10,10 +11,8 @@ const playlistSchema = new Schema(
         },
         description: String,
         playlistData: [
-            {
-                mbid: String,
-            }
-        ],
+            // songSchema,
+        ],  
         owner: {
 			type: Schema.Types.ObjectId,
 			ref: 'User'

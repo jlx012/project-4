@@ -1,35 +1,18 @@
-const mongoose = require("mongoose");
 
-const songSchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: true,
-    },
-    artist: {
-      type: String,
-      required: true,
-    },
-    album: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    duration: {
-      type: String,
-      required: true,
-    },
-    src: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
+// const mongoose = require('mongoose');
+// const Schema = mongoose.Schema;
+// const validator=require('validator');
+// const mongooseUniqueValidator = require('mongoose-unique-validator');
 
-module.exports = mongoose.model("songs", songSchema);
+// const songSchema = new Schema(
+//   {
+//     name:{
+//         type:String,
+//         require:true,
+//       },
+//   }
+// );
+
+// schema.plugin(mongooseUniqueValidator);
+
+// module.exports = mongoose.model("Song", songSchema);
