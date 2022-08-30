@@ -27,23 +27,28 @@ router.get('/playlists',  (req, res, next) => {
         .catch(next)
 })
 
-// router.post('/add-song', requireToken, async (req, res, next) => {
+router.post('/add-to-playlist', (req, res, next) => {
+    let { playlistID, song } = req.body
+    Playlist.findByIdAndUpdate(playlistID, { $push: { playlistData: song } }, { new: true })
+        .then(resp => {
+            res.status(200).json({ message: "Song Added to Playlist Success", data: resp })
+        })
+        .catch(next)
+})
 
-//     // const { name} = req.body;
-//     // const id = req.user.id;
-//     // try {
-//     //     let user = await user.findbyId(id);
-//     //     const songs = [{trackId}];
-//     // const playlist = {name, songs}
-//     // user.playlists.push(playlist);
-//     // user.save();
-//     // res.status(200).send(user);
-//     // } catch(err) {
-//     //     res.status(400).send(err);
-//     // }
-// })
-
-
+router.post('/remove-from-playlist', (req, res, next) => {
+    let { playlistID, song } = req.body
+    Playlist.findById(playlistID)
+        .then((data) => {
+            let filterSongs = data.playlistData.filter((e) => e.name != song.name)
+            Playlist.findByIdAndUpdate(playlistID, { $set: { playlistData: filterSongs } }, { new: true })
+                .then((succ) => {
+                    res.status(200).json({ message: "Song Removed from Playlist Success", data: succ })
+                })
+                .catch(next)
+        })
+        .catch(next)
+})
 
 // Show for specific playlist
 router.get('/playlists/:id', (req, res, next) => {
